@@ -1,65 +1,146 @@
-import Image from "next/image";
+// page.tsx
+"use client";
 
-export default function Home() {
+import React, { useState } from 'react';
+import { Container, TextField, Button, Typography, Box, Card, CardContent } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+// --- Styled Components for a 'Beautiful' Look ---
+
+// Custom styled Box for the main background
+const BirthdayContainer = styled(Container)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: '100vh',
+  padding: theme.spacing(3),
+  // Gradient background for a festive look
+  background: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)', // Gold/Peach gradient
+}));
+
+// Custom styled Card for the wish output
+const WishCard = styled(Card)(({ theme }) => ({
+  marginTop: theme.spacing(4),
+  padding: theme.spacing(4),
+  textAlign: 'center',
+  maxWidth: 600,
+  width: '100%',
+  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)', // Stronger shadow
+  borderRadius: 15, // Rounded corners
+  background: 'white',
+}));
+
+// --- Main Component ---
+
+export default function BirthdayWishPage() {
+  // 1. State to store the best friend's name input
+  const [bestieName, setBestieName] = useState('');
+  
+  // 2. State to store the name used for the final displayed wish
+  const [displayedName, setDisplayedName] = useState('');
+
+  // 3. State for handling the input field submission
+  const handleGenerateWish = () => {
+    // Only set the displayed name if the input is not empty
+    if (bestieName.trim()) {
+      setDisplayedName(bestieName.trim());
+    }
+  };
+  
+  // 4. State for handling the input change
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      // Clear the displayed name when input changes to hide the old wish
+      setDisplayedName('');
+      setBestieName(event.target.value);
+  }
+
+  // --- Rendered Output Components ---
+
+  const renderWishOutput = () => {
+    // Check if a name has been submitted to display the wish
+    if (!displayedName) {
+      return null; // Don't render the wish card yet
+    }
+
+    return (
+      <WishCard>
+        <CardContent>
+          <Typography variant="h3" component="div" gutterBottom sx={{ color: '#d32f2f', fontWeight: 'bold' }}>
+            🌟 Happy Birthday, {displayedName}! 🥳
+          </Typography>
+          <Typography variant="h5" component="p" sx={{ my: 3 }}>
+            To my incredible bestie,
+          </Typography>
+          <Typography variant="body1" sx={{ fontStyle: 'italic', color: '#4a4a4a', lineHeight: 1.8 }}>
+            May your special day be filled with all the joy, cake, and laughter you deserve! 
+            Thank you for being the amazing person you are and for all the unforgettable moments. 
+            Cheers to another year of adventures and ridiculous memories! Wishing you the very best.
+          </Typography>
+          <Typography variant="subtitle1" sx={{ mt: 4, fontWeight: 'medium' }}>
+            Love you! ❤️
+          </Typography>
+        </CardContent>
+      </WishCard>
+    );
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <BirthdayContainer maxWidth="md">
+      <Box sx={{ 
+        backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+        padding: 5, 
+        borderRadius: 2, 
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        textAlign: 'center',
+        width: '100%',
+        maxWidth: 500
+      }}>
+        <Typography variant="h4" component="h1" gutterBottom sx={{ color: '#880e4f', fontWeight: 'light' }}>
+          Bestie Birthday Wish Generator
+        </Typography>
+        <Typography variant="subtitle1" gutterBottom sx={{ mb: 3 }}>
+          Enter your best friend's name below!
+        </Typography>
+
+        <TextField
+          label="Best Friend's Name"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={bestieName}
+          onChange={handleInputChange}
+          onKeyPress={(e) => {
+            // Allows hitting 'Enter' to submit the wish
+            if (e.key === 'Enter') {
+              handleGenerateWish();
+            }
+          }}
+          sx={{ mb: 2 }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            programming kiyya jalqabaa barachaan jira.Githubittin commit godhaa jira.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+        <Button
+          variant="contained"
+          color="secondary"
+          size="large"
+          onClick={handleGenerateWish}
+          disabled={!bestieName.trim()}
+          sx={{
+            background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)', // Pink/Orange gradient button
+            color: 'white',
+            fontWeight: 'bold',
+            '&:hover': {
+                opacity: 0.9,
+            }
+          }}
+        >
+          Generate Birthday Wish
+        </Button>
+      </Box>
+
+      {/* Render the Wish Output component */}
+      {renderWishOutput()}
+
+    </BirthdayContainer>
   );
 }
